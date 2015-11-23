@@ -38,6 +38,11 @@ fail "Input program filename needs to end in .a" unless filename =~ /.*\.a/
 
 programs = parse_programs(filename)
 
-programs.each do |program|
+cpus = []
+programs.each_index do |program, index|
   program_instructions = parse_program(program)
+  cpu = CPU.new(program_instructions)
+  cpus[index] = cpu
+
+  cpu.run
 end
