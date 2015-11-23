@@ -34,6 +34,7 @@ class CPU
     when 'sub'
       sub(instruction.arg1)
     when 'jmp'
+      jmp(instruction.arg1)
     when 'jez'
     when 'jnz'
     when 'jgz'
@@ -95,5 +96,17 @@ class CPU
 
   def sub(source)
     @a -= from_source(source)
+  end
+
+  def jmp(location)
+    if match = /\A\+(\d+)\z/.match(location)
+      @pc += (match[1].to_i - 1)
+    elsif match = /\A-(\d+)\z/.match(location)
+      @pc -= (match[1].to_i - 1)
+    elsif match = /\A0\z/.match(location)
+      @pc -= 1
+    else
+      fail 'Not a valid location'
+    end
   end
 end

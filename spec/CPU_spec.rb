@@ -105,13 +105,79 @@ RSpec.describe CPU do
       end
     end
 
-    context 'with sub op' do
-    end
-
     context 'with jez op' do
+      context 'when zero' do
+        let(:instructions) do
+          [
+            Instruction.new("mov 0, a"),
+            Instruction.new("jez +2"),
+            Instruction.new("mov 4, a"),
+            Instruction.new("mov a, out"),
+          ]
+        end
+
+        it 'writes 0 to stdout' do
+          expect(STDOUT).to receive(:puts).with(0)
+
+          CPU.new(instructions).run
+        end
+      end
+
+      context 'when not zero' do
+        let(:instructions) do
+          [
+            Instruction.new("mov 1, a"),
+            Instruction.new("jez +2"),
+            Instruction.new("mov 4, a"),
+            Instruction.new("mov a, out"),
+          ]
+        end
+
+        it 'writes 4 to stdout' do
+          expect(STDOUT).to receive(:puts).with(4)
+
+          CPU.new(instructions).run
+        end
+      end
     end
 
     context 'with jmp op' do
+      context 'when jmp 0' do
+        let(:instructions) do
+          [
+            Instruction.new("jmp 0"),
+            Instruction.new("mov 4, a"),
+            Instruction.new("mov a, out"),
+          ]
+        end
+
+        it 'writes 4 to stdout' do
+          #expect(STDOUT).to receive(:puts).with(4)
+
+          # lol infinate loop duh
+          #CPU.new(instructions).run
+        end
+
+      end
+
+      context 'when jmp negative' do
+      end
+
+      context 'when jmp positive' do
+        let(:instructions) do
+          [
+            Instruction.new("jmp +2"),
+            Instruction.new("mov 4, a"),
+            Instruction.new("mov a, out"),
+          ]
+        end
+
+        it 'writes 0 to stdout' do
+          expect(STDOUT).to receive(:puts).with(0)
+
+          CPU.new(instructions).run
+        end
+      end
     end
 
     context 'jmp back outside of loop' do
