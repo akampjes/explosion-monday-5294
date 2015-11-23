@@ -69,7 +69,36 @@ RSpec.describe CPU do
 
         CPU.new(instructions).run
       end
+    end
 
+    context 'with swp and sav ops' do
+      let(:instructions) do
+        [
+          Instruction.new("mov 5, a"),
+          Instruction.new("sav"),
+          Instruction.new("mov 4, a"),
+          Instruction.new("swp"),
+          Instruction.new("mov a, out"),
+        ]
+      end
+
+      it 'writes 5 to stdout' do
+        expect(STDOUT).to receive(:puts).with(5)
+
+        CPU.new(instructions).run
+      end
+    end
+
+    context 'with sub op' do
+    end
+
+    context 'with jez op' do
+    end
+
+    context 'with jmp op' do
+    end
+
+    context 'jmp back outside of loop' do
     end
   end
 end

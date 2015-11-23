@@ -26,7 +26,9 @@ class CPU
     when 'mov'
       mov(instruction.arg1, instruction.arg2)
     when 'swp'
+      swp
     when 'sav'
+      sav
     when 'add'
     when 'sub'
     when 'jmp'
@@ -73,5 +75,15 @@ class CPU
     x = from_source(source)
 
     to_destination(destination, x)
+  end
+
+  def swp
+    tmp = @a
+    @a = @b
+    @b = tmp
+  end
+
+  def sav
+    @b = @a
   end
 end
