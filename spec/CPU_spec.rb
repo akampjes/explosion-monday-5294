@@ -182,5 +182,24 @@ RSpec.describe CPU do
 
     context 'jmp back outside of loop' do
     end
+
+    context 'running add.a' do
+      let(:instructions) do
+        [
+          Instruction.new("mov in, a   ~ accept integer from input bus, store in a register"),
+          Instruction.new("jez +4      ~ if a equals 0, jump to the end of the program"),
+          Instruction.new("add in      ~ add integer from input bus to a, store result in a"),
+          Instruction.new("mov a, out  ~ writes register a to output bus"),
+          Instruction.new("jmp -4      ~ jumps back to start of program")
+        ]
+      end
+
+      it 'writes 1 to stdout from input' do
+        allow(STDIN).to receive(:gets).and_return('3', '5')
+        expect(STDOUT).to receive(:puts).with(1)
+
+        CPU.new(instructions).run
+      end
+    end
   end
 end

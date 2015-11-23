@@ -36,9 +36,15 @@ class CPU
     when 'jmp'
       jmp(instruction.arg1)
     when 'jez'
+      jez(instruction.arg1)
     when 'jnz'
+      jnz(instruction.arg1)
     when 'jgz'
+      jgz(instruction.arg1)
     when 'jlz'
+      jlz(instruction.arg1)
+    else
+      fail 'Not an instruction'
     end
   end
 
@@ -102,11 +108,27 @@ class CPU
     if match = /\A\+(\d+)\z/.match(location)
       @pc += (match[1].to_i - 1)
     elsif match = /\A-(\d+)\z/.match(location)
-      @pc -= (match[1].to_i - 1)
+      @pc -= (match[1].to_i + 1)
     elsif match = /\A0\z/.match(location)
       @pc -= 1
     else
       fail 'Not a valid location'
     end
+  end
+
+  def jez(location)
+    jmp(location) if @a.zero?
+  end
+
+  def jnz(location)
+    jmp(location) unless @a.zero?
+  end
+
+  def jgz(location)
+    jmp(location) if @a > 0
+  end
+
+  def jlz(location)
+    jmp(location) if @a < 0
   end
 end

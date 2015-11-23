@@ -1,4 +1,5 @@
 require_relative 'instruction'
+require_relative 'cpu'
 
 def parse_programs(filename)
   programs = []
@@ -39,7 +40,7 @@ fail "Input program filename needs to end in .a" unless filename =~ /.*\.a/
 programs = parse_programs(filename)
 
 cpus = []
-programs.each_index do |program, index|
+programs.each_with_index do |program, index|
   program_instructions = parse_program(program)
   cpu = CPU.new(program_instructions)
   cpus[index] = cpu
