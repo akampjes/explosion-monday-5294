@@ -56,16 +56,32 @@ RSpec.describe CPU do
     context 'adding two numbers' do
       let(:instructions) do
         [
-          Instruction.new("mov in, a   ~ accept integer from input bus, store in a register"),
-          Instruction.new("add input   ~ add integer from input bus to a, store result in a"),
-          Instruction.new("mov a, out  ~ writes register a to output bus"),
+          Instruction.new("add 1"),
+          Instruction.new("add 2"),
+          Instruction.new("mov a, out")
         ]
 
       end
 
       it 'writes 1 to stdout from input' do
-        allow(STDIN).to receive(:gets).and_return('1', '2')
         expect(STDOUT).to receive(:puts).with(3)
+
+        CPU.new(instructions).run
+      end
+    end
+
+    context 'subtracting two numbers' do
+      let(:instructions) do
+        [
+          Instruction.new("mov 5, a"),
+          Instruction.new("sub 8"),
+          Instruction.new("mov a, out")
+        ]
+
+      end
+
+      it 'writes 1 to stdout from input' do
+        expect(STDOUT).to receive(:puts).with(-3)
 
         CPU.new(instructions).run
       end

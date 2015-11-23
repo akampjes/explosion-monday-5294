@@ -30,7 +30,9 @@ class CPU
     when 'sav'
       sav
     when 'add'
+      add(instruction.arg1)
     when 'sub'
+      sub(instruction.arg1)
     when 'jmp'
     when 'jez'
     when 'jnz'
@@ -85,5 +87,13 @@ class CPU
 
   def sav
     @b = @a
+  end
+
+  def add(source)
+    @a += from_source(source)
+  end
+
+  def sub(source)
+    @a -= from_source(source)
   end
 end
