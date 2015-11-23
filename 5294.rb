@@ -12,7 +12,7 @@ def parse_programs(filename)
       # setup new cpu
       unless program_lines.empty?
         programs[current_cpu] = program_lines
-        program_lines = ''
+        program_lines = []
       end
 
       current_cpu = new_cpu[1].to_i
@@ -38,12 +38,20 @@ filename = ARGV[0]
 fail "Input program filename needs to end in .a" unless filename =~ /.*\.a/
 
 programs = parse_programs(filename)
+# cpu_comms[to][from]
+cpu_comms = [[Queue.new, Queue.new], [Queue.new, Queue.new]]
 
-cpus = []
-programs.each_with_index do |program, index|
+Thread.abort_on_exception = true
+
+cpus = programs.each_with_index.map do |program, cpu_index|
   program_instructions = parse_program(program)
-  cpu = CPU.new(program_instructions)
-  cpus[index] = cpu
+  cpu = CPU.new(program_instructions, cpu_index, cpu_comms)
+  puts "here2"
 
-  cpu.run
+  Thread.new do
+    cpu.run
+  end
+end
+
+loop do
 end

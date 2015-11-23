@@ -1,8 +1,10 @@
 require 'pry'
 
 class CPU
-  def initialize(instructions)
+  def initialize(instructions, cpu_index, cpu_comms)
     @instructions = instructions
+    @cpu_index = cpu_index
+    @cpu_comms = cpu_comms
     @a = 0
     @b = 0
     @pc = 0
@@ -57,7 +59,9 @@ class CPU
     when 'null'
       0
     when /\A#\d/
-      fail 'Not implemented'
+      cpu = /\A#\d/.match(source)[1].to_i
+      # cpu_comms[to][from]
+      @cpu_comms[@cpu_index][cpu].pop
     when /\A\d+\z/
       source.to_i
     else
@@ -74,7 +78,8 @@ class CPU
     when 'null'
       ;
     when /\A#\d/
-      fail 'Not implemented'
+      cpu = /\A#\d/.match(destination)[1].to_i
+      @cpu_comms[cpu][@cpu_index] << integer
     else
       fail 'Invalid destination'
     end
